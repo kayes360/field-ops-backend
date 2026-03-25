@@ -1,6 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './../users/users.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { LoginDto } from './dto/login.dto';
 type AuthInput = {
   name: string;
   email: string;
@@ -30,9 +31,9 @@ export class AuthService {
     }
     return this.signIn(user);
   }
-  async validateUser(input: AuthInput): Promise<SignInData | null> {
-    const user = await this.UsersService.findOneByEmail(input.email);
-    if (user && user.password === input.password) {
+  async validateUser(loginDto: LoginDto): Promise<SignInData | null> {
+    const user = await this.UsersService.findOneByEmail(loginDto.email);
+    if (user && user.password === loginDto.password) {
       return {
         userId: user.userId,
         username: user.name,
